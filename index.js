@@ -1,18 +1,25 @@
-const express = require("express");
-const app = express();
+let express = require("express");
+let app = express();
+let userRepo = require("./repos/userRepo");
 
 let router = express.Router();
 app.use("/api/", router);
 
-const users = [
-  { name: "John Does", age: 36, gender: "Male" },
-  { name: "Krish", age: 34, gender: "Male" },
-  { name: "Mary", age: 24, gender: "Female" },
-];
-
 // Read Operation
 router.get("/", function (req, res, next) {
-  res.send(users);
+  userRepo.get(
+    function (data) {
+      res.status(200).json({
+        status: 200,
+        statusText: "Ok",
+        message: "Users data fetched successfully",
+        data: data,
+      });
+    },
+    function (err) {
+      next(err);
+    }
+  );
 });
 
 app.listen(5000, function () {
