@@ -22,5 +22,24 @@ let usersRepo = {
       }
     });
   },
+  insert: function (user, resolve, reject) {
+    fs.readFile(FILE_PATH, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        let users = JSON.parse(data);
+        if (user) {
+          users.push(user);
+        }
+        fs.writeFile(FILE_PATH, JSON.stringify(users), function (error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(user);
+          }
+        });
+      }
+    });
+  },
 };
 module.exports = usersRepo;
