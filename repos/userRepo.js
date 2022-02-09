@@ -66,5 +66,30 @@ let usersRepo = {
       }
     });
   },
+  delete: function (id, resolve, reject) {
+    fs.readFile(FILE_PATH, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        let users = JSON.parse(data);
+        let index = users.findIndex((u) => u.id == id);
+        if (index > -1) {
+          users.splice(index, 1);
+        } else {
+          let ex = new Error("User not found");
+          reject(ex);
+          return;
+        }
+
+        fs.writeFile(FILE_PATH, JSON.stringify(users), function (error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve("User got deleted");
+          }
+        });
+      }
+    });
+  },
 };
 module.exports = usersRepo;

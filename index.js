@@ -50,7 +50,7 @@ router.post("/", function (req, res, next) {
       res.status(201).json({
         status: 201,
         statusText: "Create",
-        message: "Users data fetched successfully",
+        message: "User created successfully",
         data: data,
       });
     },
@@ -70,6 +70,28 @@ router.put("/:id", function (req, res, next) {
         status: 200,
         statusText: "Update",
         message: "Users data updated successfully",
+        data: data,
+      });
+    },
+    function (err) {
+      res.status(404).json({
+        status: 404,
+        statusText: err.message,
+        error: err.message,
+      });
+    }
+  );
+});
+
+//Deleting user
+router.delete("/:id", function (req, res, next) {
+  userRepo.delete(
+    req.params.id,
+    function (data) {
+      res.status(200).json({
+        status: 200,
+        statusText: "User deleted",
+        message: "User with id " + req.params.id + "successfully",
         data: data,
       });
     },
