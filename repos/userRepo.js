@@ -41,5 +41,30 @@ let usersRepo = {
       }
     });
   },
+  update: function (id, newUserData, resolve, reject) {
+    fs.readFile(FILE_PATH, function (error, data) {
+      if (error) {
+        reject(error);
+      } else {
+        let users = JSON.parse(data);
+        let user = users.find((u) => u.id == id);
+        if (user) {
+          Object.assign(user, newUserData);
+        } else {
+          let ex = new Error("User not found");
+          reject(ex);
+          return;
+        }
+
+        fs.writeFile(FILE_PATH, JSON.stringify(users), function (error) {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(user);
+          }
+        });
+      }
+    });
+  },
 };
 module.exports = usersRepo;

@@ -23,6 +23,7 @@ router.get("/", function (req, res, next) {
   );
 });
 
+//Search by id
 router.get("/:id", function (req, res, next) {
   let id = req.params.id;
   userRepo.getById(
@@ -46,15 +47,38 @@ router.post("/", function (req, res, next) {
   userRepo.insert(
     req.body,
     function (data) {
-      res.status(200).json({
-        status: 200,
-        statusText: "Ok",
+      res.status(201).json({
+        status: 201,
+        statusText: "Create",
         message: "Users data fetched successfully",
         data: data,
       });
     },
     function (err) {
       next(err);
+    }
+  );
+});
+
+//Updating user
+router.put("/:id", function (req, res, next) {
+  userRepo.update(
+    req.params.id,
+    req.body,
+    function (data) {
+      res.status(200).json({
+        status: 200,
+        statusText: "Update",
+        message: "Users data updated successfully",
+        data: data,
+      });
+    },
+    function (err) {
+      res.status(404).json({
+        status: 404,
+        statusText: err.message,
+        error: err.message,
+      });
     }
   );
 });
